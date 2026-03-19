@@ -1,7 +1,7 @@
 import numpy as np
 import math
 from shapely.geometry import Point
-from ng.utils.haversine_distance import haversine_distance # Import haversine
+from .haversine_distance import haversine_distance # Import haversine
 
 def calculate_median_cluster_radius_meters(cluster_points, central_lat):
     """

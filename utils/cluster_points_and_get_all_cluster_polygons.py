@@ -1,8 +1,8 @@
 import hdbscan
 import numpy as np
 from shapely.geometry import Point, Polygon, MultiPoint
-from ng.utils.haversine_distance import haversine_distance # Import haversine
-from ng.utils.extract_points_from_geometries import extract_points_from_geometries # Import helper
+from .haversine_distance import haversine_distance # Import haversine
+from .extract_points_from_geometries import extract_points_from_geometries # Import helper
 
 def cluster_points_and_get_all_cluster_polygons(
     geometries,

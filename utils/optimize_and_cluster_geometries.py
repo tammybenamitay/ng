@@ -2,10 +2,10 @@ import optuna
 import numpy as np
 import hdbscan
 from shapely.geometry import Point
-from ng.utils.extract_points_from_geometries import extract_points_from_geometries
-from ng.utils.calculate_median_cluster_radius_meters import calculate_median_cluster_radius_meters
-from ng.utils.haversine_distance import haversine_distance
-from ng.utils.cluster_points_and_get_all_cluster_polygons import cluster_points_and_get_all_cluster_polygons
+from .extract_points_from_geometries import extract_points_from_geometries
+from .calculate_median_cluster_radius_meters import calculate_median_cluster_radius_meters
+from .haversine_distance import haversine_distance
+from .cluster_points_and_get_all_cluster_polygons import cluster_points_and_get_all_cluster_polygons
 
 def optimize_and_cluster_geometries(geometries, central_lat, n_trials=100, scenario_name="Default Scenario"):
     """
