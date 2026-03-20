@@ -48,8 +48,8 @@ def reduce_close_points(points, distance_threshold_meters, haversine_func):
                 continue
             lon2, lat2 = points[j]
             
-            # Calculate haversine distance
-            distance = haversine_func(lat1, lon1, lat2, lon2)
+            # Calculate haversine distance (pass points as tuples)
+            distance = haversine_func((lat1, lon1), (lat2, lon2))
             
             if distance <= distance_threshold_meters:
                 group.append((lon2, lat2))
