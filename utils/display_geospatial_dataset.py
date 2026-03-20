@@ -31,7 +31,14 @@ def display_geospatial_dataset(
         - 🟢 Scenario 2 (Green): Clustering with ALL POLYGONS as RANDOM POINTS (density-controlled)
         - 🟠 Scenario 3 (Orange): Clustering with HIGH FREQUENCY AREAS as RANDOM POINTS
     """
-    m_display = folium.Map(location=[new_true_lat, new_true_lon], zoom_start=zoom_start)
+    # Use an explicit pixel height so the map renders reliably in VS Code notebooks.
+    m_display = folium.Map(
+        location=[new_true_lat, new_true_lon],
+        zoom_start=zoom_start,
+        width="100%",
+        height=600,
+        control_scale=True,
+    )
 
     # Layer 1: Base Dataset (gray) - Original polygons and points
     base_fg = folium.FeatureGroup(name="📍 Base Dataset (Original Geometries)", show=True).add_to(m_display)
@@ -60,11 +67,11 @@ def display_geospatial_dataset(
             ).add_to(base_fg)
 
     # Scenario layers with distinct colors
-        scenario_info = [
-            ("🔴 Scenario 1: Original Points Only", "red", 0),
-            ("🟢 Scenario 2: All Polygons → Random Points", "green", 1),
-            ("🔵 Scenario 3: High Frequency Areas → Random Points", "blue", 2)
-        ]
+    scenario_info = [
+        ("🔴 Scenario 1: Original Points Only", "red", 0),
+        ("🟢 Scenario 2: All Polygons → Random Points", "green", 1),
+        ("🔵 Scenario 3: High Frequency Areas → Random Points", "blue", 2),
+    ]
 
     for scenario_name, color, idx in scenario_info:
         if idx < len(cluster_list):
