@@ -34,9 +34,6 @@ def find_most_frequent_polygon_area(polygons, grid_size_meters=100):
     if grid_step_lat_deg == 0: grid_step_lat_deg = 0.00001
     if grid_step_lon_deg == 0: grid_step_lon_deg = 0.00001
 
-    max_frequency = 0
-    most_frequent_areas = []
-
     lon_coords = np.arange(minx, maxx + grid_step_lon_deg, grid_step_lon_deg)
     lat_coords = np.arange(miny, maxy + grid_step_lat_deg, grid_step_lat_deg)
 
@@ -44,6 +41,9 @@ def find_most_frequent_polygon_area(polygons, grid_size_meters=100):
         print("Bounding box too small or grid_size_meters too large to form a grid. Returning overall union.")
         return [unary_union(polygons)]
 
+    # Collect all grid cells and their frequencies
+    grid_cells = []
+    frequencies = []
     for i in range(len(lon_coords) - 1):
         for j in range(len(lat_coords) - 1):
             cell_minx, cell_maxx = lon_coords[i], lon_coords[i+1]
@@ -54,15 +54,15 @@ def find_most_frequent_polygon_area(polygons, grid_size_meters=100):
             for poly in polygons:
                 if grid_cell.intersects(poly):
                     current_frequency += 1
+            grid_cells.append(grid_cell)
+            frequencies.append(current_frequency)
 
-            if current_frequency > max_frequency:
-                max_frequency = current_frequency
-                most_frequent_areas = [grid_cell]
-            elif current_frequency == max_frequency and current_frequency > 0:
-                most_frequent_areas.append(grid_cell)
+    max_frequency = max(frequencies) if frequencies else 0
+    threshold = max_frequency * 0.8  # 80% of max
+    selected_cells = [cell for cell, freq in zip(grid_cells, frequencies) if freq >= threshold and freq > 0]
 
-    print(f"Found {len(most_frequent_areas)} area(s) with max frequency of {max_frequency} intersecting polygons.")
-    if most_frequent_areas:
-        return most_frequent_areas[0].area  # Return the area of the first (or only) most frequent grid cell
+    print(f"Found {len(selected_cells)} area(s) with frequency >= 80% of max ({max_frequency}) intersecting polygons.")
+    if selected_cells:
+        return [cell for cell in selected_cells]
     else:
-        return 0.0
+        return []
