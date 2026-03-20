@@ -40,7 +40,7 @@ def optimize_and_cluster_geometries(geometries, central_lat, n_trials=100, scena
             return float('inf')
 
         point_coords = np.array(
-            [[point.y, point.x]
+            [[point.x, point.y]
             for point in shapely_points]
         )
 

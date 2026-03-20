@@ -29,7 +29,7 @@ def cluster_points_and_get_all_cluster_polygons(
         return []
 
     point_coords = np.array(
-        [[point.y, point.x]
+        [[point.x, point.y]
          for point in shapely_points]
     )
 
