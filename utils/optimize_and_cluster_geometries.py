@@ -30,8 +30,8 @@ def optimize_and_cluster_geometries(geometries, central_lat, n_trials=100, scena
 
         # Handle both Shapely geometries and coordinate tuples
         if geometries and isinstance(geometries[0], tuple) and len(geometries[0]) == 2:
-            # Convert coordinate tuples to Shapely Points
-            shapely_points = [Point(lon, lat) for lat, lon in geometries]
+            # Convert coordinate tuples to Shapely Points (preserve order: (lon, lat))
+            shapely_points = [Point(*coord) for coord in geometries]
         else:
             # Assume Shapely geometries
             shapely_points = extract_points_from_geometries(geometries)
@@ -64,8 +64,8 @@ def optimize_and_cluster_geometries(geometries, central_lat, n_trials=100, scena
             return float('inf')
 
         largest_cluster_points = [
-            shapely_points[i] for i, label in enumerate(cluster_labels)
-            if label == largest_cluster_label
+            shapely_points[i] for i, lbl in enumerate(cluster_labels)
+            if lbl == largest_cluster_label
         ]
 
         median_radius_meters = calculate_median_cluster_radius_meters(largest_cluster_points, central_lat)

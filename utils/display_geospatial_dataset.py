@@ -68,8 +68,8 @@ def display_geospatial_dataset(
 
     for scenario_name, color, idx in scenario_info:
         if idx < len(cluster_list):
-            # Only show first scenario by default
-            show_layer = (idx == 0)
+            # Show layer by default if there are any clusters to display
+            show_layer = len(cluster_list[idx]) > 0
             cluster_fg = folium.FeatureGroup(name=scenario_name, show=show_layer).add_to(m_display)
             
             for cluster_geom in cluster_list[idx]:
