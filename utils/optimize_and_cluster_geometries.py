@@ -25,8 +25,8 @@ def optimize_and_cluster_geometries(geometries, central_lat, n_trials=100, scena
     """
 
     def objective(trial):
-        min_samples = trial.suggest_int('min_samples', 2, 50)
-        eps_meters = trial.suggest_float('eps_meters', 10.0, 100.0)
+        min_samples = trial.suggest_int('min_samples', 5, 20)  # Restrict range for tighter clusters
+        eps_meters = trial.suggest_float('eps_meters', 5.0, 40.0)  # Restrict range for smaller clusters
 
         # Handle both Shapely geometries and coordinate tuples
         if geometries and isinstance(geometries[0], tuple) and len(geometries[0]) == 2:

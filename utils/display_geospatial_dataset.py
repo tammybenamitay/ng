@@ -60,11 +60,11 @@ def display_geospatial_dataset(
             ).add_to(base_fg)
 
     # Scenario layers with distinct colors
-    scenario_info = [
-        ("🔴 Scenario 1: Original Points Only", "red", 0),
-        ("🟢 Scenario 2: All Polygons → Random Points", "green", 1),
-        ("🟠 Scenario 3: High Frequency Areas → Random Points", "orange", 2)
-    ]
+        scenario_info = [
+            ("🔴 Scenario 1: Original Points Only", "red", 0),
+            ("🟢 Scenario 2: All Polygons → Random Points", "green", 1),
+            ("🔵 Scenario 3: High Frequency Areas → Random Points", "blue", 2)
+        ]
 
     for scenario_name, color, idx in scenario_info:
         if idx < len(cluster_list):
