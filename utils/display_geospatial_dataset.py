@@ -70,7 +70,8 @@ def display_geospatial_dataset(
     scenario_info = [
         ("🔴 Scenario 1: Original Points Only", "red", 0),
         ("🟢 Scenario 2: All Polygons → Random Points", "green", 1),
-        ("🔵 Scenario 3: High Frequency Areas → Random Points", "blue", 2),
+        ("🔵 Scenario 3: Clustered High Frequency Areas", "blue", 2),
+        ("🟣 High Frequency Areas (Raw Polygons)", "purple", 3),
     ]
 
     for scenario_name, color, idx in scenario_info:
