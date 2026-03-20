@@ -30,8 +30,8 @@ def optimize_and_cluster_geometries(geometries, central_lat, n_trials=100, scena
 
         # Handle both Shapely geometries and coordinate tuples
         if geometries and isinstance(geometries[0], tuple) and len(geometries[0]) == 2:
-            # Convert coordinate tuples to Shapely Points (preserve order: (lon, lat))
-            shapely_points = [Point(*coord) for coord in geometries]
+            # Assume tuples are (lon, lat) and convert to Points accordingly
+            shapely_points = [Point(lon, lat) for lon, lat in geometries]
         else:
             # Assume Shapely geometries
             shapely_points = extract_points_from_geometries(geometries)
@@ -39,12 +39,18 @@ def optimize_and_cluster_geometries(geometries, central_lat, n_trials=100, scena
         if not shapely_points:
             return float('inf')
 
+        # For clustering, use [lon, lat] order for point_coords
         point_coords = np.array(
             [[point.x, point.y]
             for point in shapely_points]
         )
 
-        clusterer = hdbscan.HDBSCAN(min_samples=min_samples, cluster_selection_epsilon=eps_meters, metric=haversine_distance)
+        # HDBSCAN with custom metric expects (lat, lon) tuples, so we must swap order in the metric
+        def metric_wrapper(a, b):
+            # a, b are [lon, lat] arrays; convert to (lat, lon) tuples
+            return haversine_distance((a[1], a[0]), (b[1], b[0]))
+
+        clusterer = hdbscan.HDBSCAN(min_samples=min_samples, cluster_selection_epsilon=eps_meters, metric=metric_wrapper)
         cluster_labels = clusterer.fit_predict(point_coords)
 
         unique_labels = [label for label in np.unique(cluster_labels) if label != -1]
@@ -79,8 +85,14 @@ def optimize_and_cluster_geometries(geometries, central_lat, n_trials=100, scena
 
     print(f"Optimization complete for {scenario_name}. Best min_samples: {best_min_samples}, best eps_meters: {best_eps_meters:.2f}, optimized median cluster radius: {study.best_trial.value:.2f} meters")
 
+    # Ensure geometries are always a list of Points in (lon, lat) order
+    if geometries and isinstance(geometries[0], tuple) and len(geometries[0]) == 2:
+        processed_geometries = [Point(lon, lat) for lon, lat in geometries]
+    else:
+        processed_geometries = geometries
+
     all_optimal_cluster_polygons = cluster_points_and_get_all_cluster_polygons(
-        geometries if not (geometries and isinstance(geometries[0], tuple)) else [Point(lon, lat) for lat, lon in geometries],
+        processed_geometries,
         central_lat=central_lat,
         min_samples=best_min_samples,
         cluster_selection_epsilon_meters=best_eps_meters

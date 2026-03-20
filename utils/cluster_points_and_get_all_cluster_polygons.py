@@ -33,11 +33,15 @@ def cluster_points_and_get_all_cluster_polygons(
          for point in shapely_points]
     )
 
-    # Initialize an hdbscan.HDBSCAN clustering model using Haversine distance
+
+    # Use a metric wrapper to swap [lon, lat] to (lat, lon)
+    def metric_wrapper(a, b):
+        return haversine_distance((a[1], a[0]), (b[1], b[0]))
+
     clusterer = hdbscan.HDBSCAN(
         min_samples=min_samples,
         cluster_selection_epsilon=cluster_selection_epsilon_meters,
-        metric=haversine_distance
+        metric=metric_wrapper
     )
 
     # Fit the clustering model to point_coords
