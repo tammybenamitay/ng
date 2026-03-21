@@ -7,7 +7,14 @@ from .calculate_median_cluster_radius_meters import calculate_median_cluster_rad
 from .haversine_distance import haversine_distance
 from .cluster_points_and_get_all_cluster_polygons import cluster_points_and_get_all_cluster_polygons
 
-def optimize_and_cluster_geometries(geometries, central_lat, n_trials=100, scenario_name="Default Scenario"):
+def optimize_and_cluster_geometries(
+    geometries,
+    central_lat,
+    n_trials=100,
+    scenario_name="Default Scenario",
+    min_samples_range=(5, 20),
+    eps_meters_range=(5.0, 40.0),
+):
     """
     Encapsulates the entire process of finding optimal HDBScan parameters using Optuna
     and then applying those parameters to identify all detected clusters.
@@ -25,8 +32,8 @@ def optimize_and_cluster_geometries(geometries, central_lat, n_trials=100, scena
     """
 
     def objective(trial):
-        min_samples = trial.suggest_int('min_samples', 5, 20)  # Restrict range for tighter clusters
-        eps_meters = trial.suggest_float('eps_meters', 5.0, 40.0)  # Restrict range for smaller clusters
+        min_samples = trial.suggest_int('min_samples', min_samples_range[0], min_samples_range[1])
+        eps_meters = trial.suggest_float('eps_meters', eps_meters_range[0], eps_meters_range[1])
 
         # Handle both Shapely geometries and coordinate tuples
         if geometries and isinstance(geometries[0], tuple) and len(geometries[0]) == 2:
