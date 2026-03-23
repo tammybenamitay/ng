@@ -85,12 +85,14 @@ def optimize_and_cluster_geometries(
         return median_radius_meters
 
     study = optuna.create_study(direction='minimize')
-    study.optimize(objective, n_trials=n_trials)
+    study.optimize(objective, n_trials=n_trials, show_progress_bar=False)
 
     best_min_samples = study.best_trial.params['min_samples']
     best_eps_meters = study.best_trial.params['eps_meters']
 
-    print(f"Optimization complete for {scenario_name}. Best min_samples: {best_min_samples}, best eps_meters: {best_eps_meters:.2f}, optimized median cluster radius: {study.best_trial.value:.2f} meters")
+    print(f"Optimization complete for {scenario_name}.")
+    print(f"  Best parameters: min_samples={best_min_samples}, eps_meters={best_eps_meters:.2f}")
+    print(f"  Optimized median radius of largest cluster: {study.best_trial.value:.2f} meters")
 
     # Ensure geometries are always a list of Points in (lon, lat) order
     if geometries and isinstance(geometries[0], tuple) and len(geometries[0]) == 2:
@@ -104,5 +106,15 @@ def optimize_and_cluster_geometries(
         min_samples=best_min_samples,
         cluster_selection_epsilon_meters=best_eps_meters
     )
+
+    # Validate clustering results
+    if not all_optimal_cluster_polygons:
+        print(f"  WARNING: {scenario_name} produced NO CLUSTERS!")
+        print(f"    This usually means:")
+        print(f"    - Parameters too restrictive (try larger eps_meters or smaller min_samples)")
+        print(f"    - Point density too low for clustering")
+        print(f"    - All points classified as noise by HDBSCAN")
+    else:
+        print(f"  Generated {len(all_optimal_cluster_polygons)} cluster polygon(s)")
 
     return all_optimal_cluster_polygons, best_min_samples, best_eps_meters

@@ -1,0 +1,6 @@
+"env": {
+    "ANTHROPIC_BASE_URL": "https://openrouter.ai/api",
+    "ANTHROPIC_AUTH_TOKEN": "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",
+    "ANTHROPIC_API_KEY": "",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL": "moonshotai/kimi-k2.5"
+  }

@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(:)",
+      "Bash(ls -la C:/ng/*.txt C:/ng/*.md C:/ng/*.toml C:/ng/*.cfg)",
+      "Bash(\".venv/Scripts/python.exe\" --version)",
+      "Bash(grep -E \"\\\\.\\(py|ipynb\\)$\")",
+      "Bash(\".venv/Scripts/jupyter.exe\" nbconvert:*)"
+    ]
+  }
+}
