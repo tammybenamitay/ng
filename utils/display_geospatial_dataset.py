@@ -71,7 +71,7 @@ def display_geospatial_dataset(
         ("🔴 Scenario 1: Original Points Only", "red", 0),
         ("🟢 Scenario 2: All Polygons → Random Points", "green", 1),
         ("🔵 Scenario 3: Clustered High Frequency Areas", "blue", 2),
-        ("🩷 Scenario 4: Geohash-Based Aggregation", "magenta", 3),
+        ("🩷 Scenario 4: Geohash-Based Aggregation", "pink", 3),
         ("🟣 High Frequency Areas (Raw Polygons)", "purple", 4),
     ]
 
