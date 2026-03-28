@@ -17,8 +17,9 @@ def display_geospatial_dataset(
     Displays geospatial clustering results on an interactive Folium map.
 
     Args:
-        cluster_list (list): List of 3 cluster polygon lists:
-                           [scenario_1_clusters, scenario_2_clusters, scenario_3_clusters]
+        cluster_list (list): List of 6 cluster polygon lists:
+                           [scenario_1_clusters, scenario_2_clusters, scenario_3_clusters,
+                            scenario_4_clusters, scenario_5_clusters, high_freq_polygons]
         median_list (list): List of median radius values for each scenario.
         centroid_polygons (list): List of Shapely geometries (base dataset).
         new_true_lat (float): Latitude for map center.
@@ -28,8 +29,11 @@ def display_geospatial_dataset(
     Map Layers (toggle in legend):
         - 📍 Base Dataset (Gray): Original polygons and points
         - 🔴 Scenario 1 (Red): Clustering with ORIGINAL POINTS ONLY
-        - 🟢 Scenario 2 (Green): Clustering with ALL POLYGONS as RANDOM POINTS (density-controlled)
-        - 🟠 Scenario 3 (Orange): Clustering with HIGH FREQUENCY AREAS as RANDOM POINTS
+        - 🟢 Scenario 2 (Green): Clustering with ALL POLYGONS as RANDOM POINTS
+        - 🔵 Scenario 3 (Blue): Clustering with HIGH FREQUENCY AREAS as RANDOM POINTS
+        - 🩷 Scenario 4 (Pink): Geohash-Based Aggregation
+        - 🟤 Scenario 5 (Brown): Polygon Centroids Only
+        - 🟣 High Frequency Areas (Purple): Raw high-overlap polygon zones
     """
     # Use an explicit pixel height so the map renders reliably in VS Code notebooks.
     m_display = folium.Map(
@@ -72,7 +76,8 @@ def display_geospatial_dataset(
         ("🟢 Scenario 2: All Polygons → Random Points", "green", 1),
         ("🔵 Scenario 3: Clustered High Frequency Areas", "blue", 2),
         ("🩷 Scenario 4: Geohash-Based Aggregation", "pink", 3),
-        ("🟣 High Frequency Areas (Raw Polygons)", "purple", 4),
+        ("� Scenario 5: Polygon Centroids Only", "brown", 4),
+        ("🟣 High Frequency Areas (Raw Polygons)", "purple", 5),
     ]
 
     for scenario_name, color, idx in scenario_info:
